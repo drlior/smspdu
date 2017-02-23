@@ -1,5 +1,5 @@
-#-*- encoding: utf8 -*-
-'''SMS PDU encoding and decoding, including GSM-0338 character set.
+# -*- encoding: utf8 -*-
+"""SMS PDU encoding and decoding, including GSM-0338 character set.
 
 Overview
 --------
@@ -25,12 +25,12 @@ PDU Interface
 Typical usage will involve the SMS_SUBMIT and SMS_DELIVER .fromPDU(),
 .toPDU() and .create() methods:
 
->>> from smspdu import SMS_SUBMIT
->>> pdu = SMS_SUBMIT.create('sender', 'recipient', 'hello, world')
->>> pdu.toPDU()
+#>>> from smspdu import SMS_SUBMIT
+#>>> pdu = SMS_SUBMIT.create('sender', 'recipient', 'hello, world')
+#>>> pdu.toPDU()
 '010010D0F2F2380D4F97DD7400000CE8329BFD6681EE6F399B0C'
->>> pdu = smspdu.SMS_SUBMIT.fromPDU(_, 'sender')
->>> pdu.user_data
+#>>> pdu = smspdu.SMS_SUBMIT.fromPDU(_, 'sender')
+#>>> pdu.user_data
 u'hello, world'
 
 
@@ -114,23 +114,23 @@ Version History (in Brief)
 This code is copyright 2011 eKit.com Inc (http://www.ekit.com/)
 See the end of the source file for the license of use.
 
-'''
+"""
 
 __version__ = '1.0'
 
-from .pdu import (SMS_SUBMIT, SMS_DELIVER, attempt_encoding, 
-    smpp_to_sms_data_coding, remove_accent, remove_typography,
-    decode_ascii_safe)
+from .pdu import (SMS_SUBMIT, SMS_DELIVER, attempt_encoding,
+                  smpp_to_sms_data_coding, remove_accent, remove_typography,
+                  decode_ascii_safe)
 from .gsm0338 import Codec as gsm0338
 
+
 def gsm0338_safe(message):
-    '''Make the given unicode string gsm0338-safe by replacing out any
+    """Make the given unicode string gsm0338-safe by replacing out any
     characters not present in the above.
-    '''
+    """
     c = gsm0338()
     gsm_message = c.encode(message, 'replace')
     return c.decode(gsm_message)[0]
-
 
 # Copyright (c) 2011 eKit.com Inc (http://www.ekit.com/)
 #

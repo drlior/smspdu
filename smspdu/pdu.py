@@ -56,6 +56,9 @@ class SMS_GENERIC(object):
     account = None
     cost = None
 
+    def __init__(self):
+        self.tp_dcs = None
+
     def isData(self):
         '''Determine whether this PDU contains binary data.
 
@@ -210,7 +213,7 @@ class SMS_GENERIC(object):
             try:
                 user_data = unpackUCS2(data)
                 user_data = user_data[:actual_udl]
-            except UnicodeDecodeError, e:
+            except UnicodeDecodeError as e:
                 raise PDUDecodeError('PDU corrupted: %s' % e)
         else:
             raise PDUDecodeError('tp_dcs of 0x%02x (%s), charset %s' % (tp_dcs,
@@ -1012,13 +1015,13 @@ def parse_udhi(data, debug=False):
     headerlen = 0
 
     if debug:
-        print "user-data", ' '.join([hex(ord(x)) for x in data])
+        print("user-data", ' '.join([hex(ord(x)) for x in data]))
     headerlen = ord(data[0])
     if debug:
-        print "header len", headerlen
+        print("header len", headerlen)
     header = data[1:headerlen + 1]
     if debug:
-        print "header", ' '.join([hex(ord(x)) for x in header])
+        print("header", ' '.join([hex(ord(x)) for x in header]))
     data = data[headerlen + 1:]
     while header:
         ie = ord(header[0])
@@ -1027,7 +1030,7 @@ def parse_udhi(data, debug=False):
         headers[ie] = ieval
         header = header[2 + ielen:]
     if debug:
-        print "headers", headers
+        print("headers", headers)
 
     for ie, val in headers.items():
         if ie == 0:
@@ -1124,8 +1127,8 @@ def decompress_user_data(bytes):
     '''
     bytes = bytearray(bytes)
     header = CompressionHeader(bytes)
-    print header
-    TODO
+    print(header)
+    # TODO
 
 class CompressionHeader:
     '''Parse the compression header from the byte stream, consuming its
@@ -1197,7 +1200,7 @@ def punctuate_user_data(bytes):
     # the PU-LST attribute set, add the character which has the PU-LST
     # attribute set to the output stream.
     # ... PROFIT
-    TODO
+    # TODO
     
 # Of _course_ it's little endian. Mother f$ckers
 _sevenBitMasksUnpack = (
@@ -1568,14 +1571,14 @@ def dump(pdu):
     tp_mti = first & 0x03  # message type
     if tp_mti == 1:
         p = SMS_SUBMIT.fromPDU(pdu, 'unknown')
-        print
-        print p.toPDU(1)
-        print p.dump()
+        
+        print(p.toPDU(1))
+        print(p.dump())
     else:
         p = SMS_DELIVER.fromPDU(pdu, 'unknown')
-        print
-        print p.toPDU(1)
-        print p.dump()
+        
+        print(p.toPDU(1))
+        print(p.dump())
 
 if __name__ == '__main__':
     import sys
